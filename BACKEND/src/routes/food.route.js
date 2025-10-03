@@ -14,7 +14,10 @@ router.post('/',
     upload.single('video'),
     foodController.createFood )
 
-router.get('/', )
+router.get('/', 
+    authMiddleware.authUserMiddleware,
+    foodController.getFoodItems
+)
 
 
 module.exports = router
