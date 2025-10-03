@@ -1,46 +1,45 @@
-const userModel = require('../models/auth.model')
+const foodPartnerModel = require("../models/foodPartner.model");
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken');
-const { default: mongoose } = require('mongoose');
 
-async function registerUser(req, res) {
-    const {fullName, email, password} = req.body;
-    const isUserAlreadyExist = await userModel.findOne({
-        email
-    })
+async function registerFoodPartner(req, res) {
+    const {name, email, password} = req.body;
 
-    if(isUserAlreadyExist){
+    const isAccountAlreadyExists = await foodPartnerModel.findOne({email})
+
+    if(!isAccountAlreadyExists){
         return res.status(400).json({
-            message: 'User already exists'
+            message: "Food partner account already exists"
         })
     }
+    const hashedPassword = await bcrypt.hash(password, 10)
 
-    const hashedsPassword = await bcrypt.hash(password, 10)
-
-    const user = await userModel.create({
-        fullName,
+    const foodParter = await foodPartnerModel.create({
+        name,
         email,
-        password: hashedsPassword
+        password: hashedPassword
     })
 
     const token = jwt.sign({
-        id: user._id,
-    },process.env.JWT_SECRET)
+        id: foodParter._id,
+    }, process.env.JWT_SECRET)
 
     res.cookie("token", token)
+
     res.status(201).json({
-        message: 'user registered successfully',
-        user:{
-            _id: user._id,
-            email: user.email,
-            fullName: user.fullName
+        message:"Food partner registered successfully",
+        foodParter: {
+            _id: foodParter._id,
+            email: foodParter.email,
+            name: foodParter.naem
         }
     })
 }
 
-async function loginUser(req, res) {
+
+async function loginFoodPartner(req, res) {
     const { email, password} = req.body;
-    const user = await userModel.findOne({
+    const user = await foodPartnerModel.findOne({
         email
     })
     if(!user){
@@ -75,6 +74,6 @@ async function loginUser(req, res) {
 
 
 module.exports = {
-    registerUser,
-    loginUser
+    registerFoodPartner,
+    loginFoodPartner
 }
