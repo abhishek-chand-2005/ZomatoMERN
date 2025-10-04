@@ -1,0 +1,87 @@
+/* Fullscreen vertical reels layout */
+:root{
+  --overlay-gradient: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.9) 100%);
+}
+
+.reels-root, .reels-container {
+  height: 100vh;
+  width: 100vw;
+}
+
+.reels-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reel {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  scroll-snap-align: start;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reel-video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+
+/* Overlay at bottom to show description above CTA */
+.reel-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 20px calc(6vh + 20px) 20px; /* extra bottom space so content isn't flush with screen bottom */
+  pointer-events: none; /* allow clicks to pass through except on interactive children */
+  /* flip gradient so darker area is at bottom where text sits */
+  background-image: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.35) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.reel-meta {
+  margin-bottom: 6vh; /* lift content slightly above bottom */
+  margin-left: 16px;
+  color: #fff;
+  max-width: calc(100% - 32px);
+  pointer-events: auto; /* allow clicking button/link */
+}
+
+.reel-description {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  /* include standard fallback for linters / future compatibility */
+  line-clamp: 2;
+  -webkit-line-clamp: 2; /* limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reel-cta {
+  display: inline-block;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Small screens adjustments */
+@media (max-width: 640px) {
+  .reel-description { font-size: 0.95rem }
+  .reel-meta { margin-left: 12px }
+}
