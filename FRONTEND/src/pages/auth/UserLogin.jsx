@@ -1,24 +1,32 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'; // 🛠️ You also forgot to import useState!
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const UserLogin = () => {
+  const [value, setValue] = useState(""); // ✅ This is fine
+  const navigate = useNavigate();         // ✅ Moved to top level (legal)
 
   const handleSubmit = async (e) => {
-    const navigate = useNavigate();
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const response = await axios.post("http://localhost:3000/api/auth/user/login", {
-      email,
-      password
-    }, { withCredentials: true });
+    console.log(email, password);
 
-    console.log(response.data);
+    try {
+      const response = await axios.post("http://localhost:3000/api/userAuth/login", {
+        email,
+        password
+      }, { withCredentials: true });
 
-    navigate("/"); // Redirect to home after login
+      console.log(response.data);
+      navigate("/"); // ✅ Now this works
 
+    } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
+      // You can show error message to user here
+    }
   };
 
   return (
@@ -30,7 +38,7 @@ const UserLogin = () => {
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="field-row">
             <label>Email</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email"  />
+            <input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" />
           </div>
 
           <div className="field-row">
@@ -44,7 +52,7 @@ const UserLogin = () => {
         <p className="auth-cta">Don't have an account? <Link to="/user/register">Create one</Link></p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserLogin
+export default UserLogin;

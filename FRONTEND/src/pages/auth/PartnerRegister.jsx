@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const PartnerRegister = () => {
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   
   const handleSubmit = async (e) => { 
     e.preventDefault();
@@ -13,7 +13,7 @@ const PartnerRegister = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const response = await axios.post("http://localhost:3000/api/auth/food-partner/register", {
+    const response = await axios.post("http://localhost:3000/api/foodPartnerAuth/register", {
       name:businessName,
       email,
       password

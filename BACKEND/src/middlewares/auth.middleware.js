@@ -1,10 +1,9 @@
-const { use } = require('react');
 const foodParterModel = require('../models/foodPartner.model')
 const userModel = require('../models/user.model')
 const jwt = require('jsonwebtoken')
 
 async function authFoodPartnerMiddleware(req, res, next) {
-    const token = req.cookie.token;
+    const token = req.cookies.token;
 
     if(!token){
        return res.status(401).json({
@@ -14,11 +13,10 @@ async function authFoodPartnerMiddleware(req, res, next) {
 
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const foodParter = await foodParterModel.findById(decoded.id)
+        const foodPartner = await foodParterModel.findById(decoded.id)
 
-        req.foodParter = foodParter
-
-        next()
+        req.foodPartner = foodPartner
+        next();
 
 
     }catch(err){
@@ -29,7 +27,7 @@ async function authFoodPartnerMiddleware(req, res, next) {
 }
 
 async function authUserMiddleware(req, res, next) {
-    const token = req.cookie.token;
+    const token = req.cookies.token;
 
     if(!token){
         return res.status(401).json({

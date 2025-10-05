@@ -8,15 +8,14 @@ const foodSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    discription: {
-        type: {
-            type: String
-        },
-        foodPartner:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"foodParter"
-        }
+    description: {
+        type: String
+    },
+    foodPartner:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"foodParter"
     }
+    
 })
 
 const foodModel = mongoose.model("food", foodSchema)
