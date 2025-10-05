@@ -6,13 +6,16 @@ import PartnerRegister from '../pages/auth/PartnerRegister'
 import PartnerLogin from '../pages/auth/PartnerLogin'
 import CreateFood from '../pages/food-partner/CreateFood'
 import Home from '../pages/general/Home'
+import Saved from '../pages/general/saved'
+import BottomNav from '../components/BottomNav'
 import Profile from '../pages/food-partner/Profile'
 
 const AppRoutes = () => {
   return (
     <Router>
     <Routes>
-      <Route path="/" element={<Home/>} />
+      <Route path="/" element={<><Home /><BottomNav /></>} />
+      <Route path="/saved" element={<><Saved /><BottomNav /></>} />
       <Route path="/user/register" element={<UserRegister/>} />
       <Route path="/user/login" element={<UserLogin/>} />
       <Route path="/food-partner/register" element={<PartnerRegister/>} />

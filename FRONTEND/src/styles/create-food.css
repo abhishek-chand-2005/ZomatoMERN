@@ -1,0 +1,47 @@
+@import './theme.css';
+
+/* Mobile-first layout for CreateFood page */
+.create-food-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+  background: var(--color-bg);
+}
+
+.create-food-card {
+  width: 100%;
+  max-width: 720px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.create-food-title { margin: 0 0 8px 0; font-size: 1.25rem }
+
+.create-food-form { display: flex; flex-direction: column; gap: 12px }
+.field-row { display: flex; flex-direction: column; gap: 8px }
+.field-label { font-size: 0.9rem; color: var(--color-text-secondary) }
+.field-input { padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: transparent; color: var(--color-text); outline: none }
+.field-input::placeholder { color: var(--color-text-secondary) }
+.field-note { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px }
+.field-error { color: var(--color-danger); font-size: 13px; margin-top: 6px }
+
+.video-input-wrapper { display: flex; gap: 8px; align-items: center }
+.file-input { display: none }
+.file-trigger { cursor: pointer }
+
+.video-preview { margin-top: 8px; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden }
+.video-element { width: 100%; height: auto; display: block }
+
+.form-actions { display: flex; gap: 8px; margin-top: 8px }
+.btn-primary { background: var(--color-accent); color: #fff; padding: 10px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-weight: 600 }
+.btn-outline { background: transparent; border: 1px solid var(--color-border); padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer }
+
+/* Responsive: larger screens use a centered card with more padding */
+@media (min-width: 720px) {
+  .create-food-card { padding: 24px }
+}
