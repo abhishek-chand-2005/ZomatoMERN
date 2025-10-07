@@ -94,23 +94,16 @@ async function registerFoodPartner(req, res) {
 
 async function loginFoodPartner(req, res) {
     const { email, password} = req.body;
-    const user = await foodPartnerModel.findOne({
-        email
-    })
-    if(!user){
-        return res.status(400).json({
-            message: "Invalid credintial."
-        })
+
+    const validateLoginInputError = validateLoginInput(email, password);
+    if (validateLoginInputError) {
+        return res.status(400).json({ message: validateLoginInputError });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password)
-    if(!isPasswordValid){
-        return res.status(400).json({
-            message: "Invalid credintial."
-    })}
+    const foodPartner = await AuthService.loginFoodPartner(email, password)
 
     const token = jwt.sign({
-        id: user._id,
+        id: foodPartner._id,
     }, process.env.JWT_SECRET)
 
     res.cookie("token", token)
@@ -119,9 +112,9 @@ async function loginFoodPartner(req, res) {
         message:"User loggedIn successfully.",
 
         user:{
-            _id: user._id,
-            email: user.email,
-            fullName: user.fullName
+            _id: foodPartner._id,
+            email: foodPartner.email,
+            fullName: foodPartner.fullName
         }
     })
 

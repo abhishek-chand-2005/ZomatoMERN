@@ -77,11 +77,32 @@ async function registerFoodPartner(name, password, email) {
     }
 }
 
+async function loginFoodPartner(email, password) {
+    try {
+        const foodPartner = await foodPartnerModel.findOne({ email })
+        if(!foodPartner){
+            throw new Error("Invalid credintial.")
+        }
+        
+        const isPasswordValid = await bcrypt.compare(password, foodPartner.password)
+        if(!isPasswordValid){
+            return res.status(400).json({
+                message: "Invalid credintial."
+            })
+        }
+        return foodPartner;
+    }catch(err){
+            console.error("Error in loginFoodPartner:", err);
+            throw err;
+    }
+}
+
 
 module.exports = {
     registerUser,
     loginUser,
-    registerFoodPartner
+    registerFoodPartner,
+    loginFoodPartner
 };
 
 
