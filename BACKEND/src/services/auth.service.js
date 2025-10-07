@@ -1,13 +1,13 @@
 const bcrypt = require('bcryptjs')
-const userModel = require('../models/user.model')
-const foodPartnerModel = require("../models/foodPartner.model");
+const userDAO = require('../dao/user.dao');
+const foodPartnerDAO = require('../dao/foodPartner.dao');
 
 
 async function registerUser(fullName, password, email) {
 
    try { 
-        const isUserNameTaken = await userModel.findOne({ fullName });
-        const isUserAlreadyExist = await userModel.findOne({email})
+        const isUserNameTaken = await userDAO.findUserByFullName(fullName);
+        const isUserAlreadyExist = await userDAO.findUserByEmail(email);
 
         if (isUserNameTaken) {
             throw new Error('Username is already taken');
@@ -17,13 +17,12 @@ async function registerUser(fullName, password, email) {
         }
         
         const hashedsPassword = await bcrypt.hash(password, 10)
-        const user = await userModel.create({
+        const user = await userDAO.createUser({
             fullName,
             email,
             password: hashedsPassword
         })
         return {
-            message: 'user created in DB successfully',
             user:{
                 _id: user._id,
                 email: user.email,
@@ -38,11 +37,10 @@ async function registerUser(fullName, password, email) {
 
 async function loginUser(email, password) {
     try {
-        const user = await userModel.findOne({email})
+        const user = await userDAO.findUserByEmail(email)
         if(!user){
             console.log("User not found with email:", email);
         }
-        console.log(user)
          const isPasswordValid = await bcrypt.compare(password, user.password)
             if(!isPasswordValid){
                 return res.status(400).json({
@@ -56,21 +54,35 @@ async function loginUser(email, password) {
 }
 
 async function registerFoodPartner(name, password, email) {
-    const isAccountAlreadyExists = await foodPartnerModel.findOne({email})
+    const isUserNameTaken = await foodPartnerDAO.findUserByFullName(name);
+    const isAccountAlreadyExists = await foodPartnerDAO.findFoodPartnerByEmail(email);
     
-        try{
-            if(isAccountAlreadyExists){
-            throw new Error ("Food partner account already exists");
-        }
-        const hashedPassword = await bcrypt.hash(password, 10)
-    
-        const foodParter = await foodPartnerModel.create({
-            name,
-            email,
-            password: hashedPassword
-        })
+    if (isUserNameTaken) {
+        throw new Error('Username is already taken');
+    }
+    if(isUserAlreadyExist) {
+        throw new Error('User with this email already exists');
+    }
 
-        return foodParter;
+    try{
+        if(isAccountAlreadyExists){
+        throw new Error ("Food partner account already exists");
+    }
+    const hashedPassword = await bcrypt.hash(password, 10)
+    
+    const foodParter = await foodPartnerDAO.createFoodPartner({
+        name,
+        email,
+        password: hashedPassword
+    })
+
+    return {
+        foodParter:{
+            _id: foodParter._id,
+            email: foodParter.email,
+            name: foodParter.name
+        }
+    }
     }catch(err){
         console.error("error in registerFoodPartner:", err);
         throw err;
@@ -79,7 +91,7 @@ async function registerFoodPartner(name, password, email) {
 
 async function loginFoodPartner(email, password) {
     try {
-        const foodPartner = await foodPartnerModel.findOne({ email })
+        const foodPartner = await foodPartnerDAO.findFoodPartnerByEmail({ email })
         if(!foodPartner){
             throw new Error("Invalid credintial.")
         }

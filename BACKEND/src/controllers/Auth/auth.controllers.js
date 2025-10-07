@@ -1,8 +1,6 @@
-const foodPartnerModel = require("../../models/foodPartner.model");
 const AuthService = require('../../services/auth.service')
 const { validateRegisterInput, validateLoginInput } = require('../../validator/auth.validate');
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken');
+const { signToken } = require('../../utils/jwt')
 
 async function registerUser(req, res) {
     const {fullName, email, password} = req.body;
@@ -12,21 +10,12 @@ async function registerUser(req, res) {
         return res.status(400).json({ message: validationError });
     }
 
-    const user = await AuthService.registerUser(fullName, password, email);
+    const newUser = await AuthService.registerUser(fullName, password, email);
 
-    const token = jwt.sign({
-        id: user._id,
-    },process.env.JWT_SECRET)
+    const token = signToken({id: newUser._id})
 
     res.cookie("token", token)
-    res.status(201).json({
-        message: 'user registered successfully',
-        user:{
-            _id: user._id,
-            email: user.email,
-            fullName: user.fullName
-        }
-    })
+    res.status(201).json({message: 'user registered successfully'})
 }
 
 async function loginUser(req, res) {
@@ -37,18 +26,15 @@ async function loginUser(req, res) {
         return res.status(400).json({ message: validateLoginInputError });
     }
 
-    const user = await AuthService.loginUser(email, password)
-    console.log('hi')
-    console.log(user)
-    if(!user){
+    const newUser = await AuthService.loginUser(email, password)
+
+    if(!newUser){
         return res.status(400).json({
             message: "Invalid credintial."
         })
     }
 
-    const token = jwt.sign({
-        id: user._id,
-    }, process.env.JWT_SECRET)
+    const token = signToken({id: newUser._id})
 
     res.cookie("token", token)
 
@@ -56,9 +42,9 @@ async function loginUser(req, res) {
         message:"User loggedIn successfully.",
 
         user:{
-            _id: user._id,
-            email: user.email,
-            fullName: user.fullName
+            _id: newUser._id,
+            email: newUser.email,
+            fullName: newUser.fullName
         }
     })
 
@@ -76,9 +62,7 @@ async function registerFoodPartner(req, res) {
 
     const foodParter = await AuthService.registerFoodPartner(name, password, email);
 
-    const token = jwt.sign({
-        id: foodParter._id,
-    }, process.env.JWT_SECRET)
+     const token = signToken({id: foodParter._id})
 
     res.cookie("token", token)
 
@@ -102,9 +86,7 @@ async function loginFoodPartner(req, res) {
 
     const foodPartner = await AuthService.loginFoodPartner(email, password)
 
-    const token = jwt.sign({
-        id: foodPartner._id,
-    }, process.env.JWT_SECRET)
+    const token = signToken({id: foodPartner._id})
 
     res.cookie("token", token)
 
