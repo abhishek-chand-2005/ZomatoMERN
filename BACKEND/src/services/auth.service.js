@@ -35,9 +35,27 @@ async function registerUser(fullName, password, email) {
     }
 }
 
+async function loginUser(email, password) {
+    try {
+        const user = await userModel.findOne({email})
+        if(!user){
+            console.log("User not found with email:", email);
+        }
+        console.log(user)
+         const isPasswordValid = await bcrypt.compare(password, user.password)
+            if(!isPasswordValid){
+                return res.status(400).json({
+                    message: "Invalid credintial."
+            })}
+        return user;
+    }catch(err){
+        console.error("Error in login:", err);
+        throw err;
+    }}
 
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser
 };
 
 

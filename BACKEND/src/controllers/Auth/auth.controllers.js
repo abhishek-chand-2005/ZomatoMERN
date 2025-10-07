@@ -32,20 +32,20 @@ async function registerUser(req, res) {
 
 async function loginUser(req, res) {
     const { email, password} = req.body;
-    const user = await userModel.findOne({
-        email
-    })
+
+    const validateLoginInputError = validateLoginInput(email, password);
+    if (validateLoginInputError) {
+        return res.status(400).json({ message: validateLoginInputError });
+    }
+
+    const user = await AuthService.loginUser(email, password)
+    console.log('hi')
+    console.log(user)
     if(!user){
         return res.status(400).json({
             message: "Invalid credintial."
         })
     }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password)
-    if(!isPasswordValid){
-        return res.status(400).json({
-            message: "Invalid credintial."
-    })}
 
     const token = jwt.sign({
         id: user._id,
