@@ -1,11 +1,17 @@
 const express = require('express');
 const cookieParser = require('cookie-parser')
-const userRoutes = require('./routes/user.routes')
-const foodPartnerRoutes = require('./routes/foodPartner.routes')
-const foodRoutes = require('./routes/food.route')
-const foodPartner = require('./routes/food-partner.route')
 const cors = require('cors')
 
+// Routes imports
+const userRoutes = require('./routes/Auth/auth.routes')
+const foodRoutes = require('./routes/food.route')
+const foodPartner = require('./routes/food-partner.route')
+
+// Database
+const connectDB = require('./config/db')
+
+// Initializations
+connectDB()
 const app = express();
 app.use(cookieParser())
 app.use(express.json())
@@ -14,8 +20,8 @@ app.use(cors({
     credentials: true
 }))
 
-app.use('/api/userAuth', userRoutes)
-app.use('/api/foodPartnerAuth', foodPartnerRoutes)
+// SET UP - Routes middlewares
+app.use('/api/Auth', userRoutes)
 app.use('/api/food', foodRoutes)
 app.use('/api/food-partner', foodPartner)
 
