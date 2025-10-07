@@ -1,4 +1,3 @@
-const userModel = require('../../models/user.model')
 const foodPartnerModel = require("../../models/foodPartner.model");
 const AuthService = require('../../services/auth.service')
 const { validateRegisterInput, validateLoginInput } = require('../../validator/auth.validate');
@@ -68,20 +67,14 @@ async function loginUser(req, res) {
 async function registerFoodPartner(req, res) {
     const {name, email, password} = req.body;
 
-    const isAccountAlreadyExists = await foodPartnerModel.findOne({email})
-
-    if(isAccountAlreadyExists){
+    const validateionError = validateRegisterInput(name, password, email);
+    if(validateionError){
         return res.status(400).json({
-            message: "Food partner account already exists"
+            message: validateionError
         })
     }
-    const hashedPassword = await bcrypt.hash(password, 10)
 
-    const foodParter = await foodPartnerModel.create({
-        name,
-        email,
-        password: hashedPassword
-    })
+    const foodParter = await AuthService.registerFoodPartner(name, password, email);
 
     const token = jwt.sign({
         id: foodParter._id,

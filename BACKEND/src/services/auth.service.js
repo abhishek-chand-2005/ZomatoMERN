@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const userModel = require('../models/user.model')
+const foodPartnerModel = require("../models/foodPartner.model");
 
 
 async function registerUser(fullName, password, email) {
@@ -51,11 +52,36 @@ async function loginUser(email, password) {
     }catch(err){
         console.error("Error in login:", err);
         throw err;
-    }}
+    }
+}
+
+async function registerFoodPartner(name, password, email) {
+    const isAccountAlreadyExists = await foodPartnerModel.findOne({email})
+    
+        try{
+            if(isAccountAlreadyExists){
+            throw new Error ("Food partner account already exists");
+        }
+        const hashedPassword = await bcrypt.hash(password, 10)
+    
+        const foodParter = await foodPartnerModel.create({
+            name,
+            email,
+            password: hashedPassword
+        })
+
+        return foodParter;
+    }catch(err){
+        console.error("error in registerFoodPartner:", err);
+        throw err;
+    }
+}
+
 
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    registerFoodPartner
 };
 
 
