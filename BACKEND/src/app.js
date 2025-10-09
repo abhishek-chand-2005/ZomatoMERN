@@ -4,7 +4,7 @@ const cors = require('cors')
 
 // Routes imports
 const userRoutes = require('./routes/Auth/auth.routes')
-const foodRoutes = require('./routes/food.route')
+const restaurantRoutes = require('./routes/restaurant.routes')
 const foodPartner = require('./routes/food-partner.route')
 
 // Database
@@ -22,7 +22,7 @@ app.use(cors({
 
 // SET UP - Routes middlewares
 app.use('/api/Auth', userRoutes)
-app.use('/api/food', foodRoutes)
 app.use('/api/food-partner', foodPartner)
+app.use('/api/food', restaurantRoutes)
 
 module.exports = app;

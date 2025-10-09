@@ -23,6 +23,16 @@ const foodSchema = new mongoose.Schema({
         type: Number,
         default: 0  
     },
+    analytics: {
+        totalSales: {
+            type: Number,
+            default: 0
+        },
+        totalOrders: {
+            type: Number,
+            default: 0
+        }
+    }
 
     
 })

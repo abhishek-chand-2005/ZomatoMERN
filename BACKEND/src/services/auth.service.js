@@ -91,7 +91,7 @@ async function registerFoodPartner(name, password, email) {
 
 async function loginFoodPartner(email, password) {
     try {
-        const foodPartner = await foodPartnerDAO.findFoodPartnerByEmail({ email })
+        const foodPartner = await foodPartnerDAO.findFoodPartnerByEmail( email )
         if(!foodPartner){
             throw new Error("Invalid credintial.")
         }

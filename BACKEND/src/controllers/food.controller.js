@@ -2,6 +2,7 @@ const foodModel = require('../models/food.model')
 const likeModel = require('../models/likes.model')
 const saveModel = require('../models/save.model')
 const storageService = require('../services/storage.service')
+const updateFoodAnalytic = require('../services/updateFoodAnalytics.service')
 const { v4: uuid} = require('uuid')
 
 async function createFood(req, res) {
@@ -20,6 +21,16 @@ async function createFood(req, res) {
     })
 
     
+}
+
+async function deleteFood(req, res) {
+    const foodId = req.params.id
+    const result = await foodModel.findByIdAndDelete(foodId);
+
+    res.status(200).json({
+        message: 'food deleted',
+        result
+    })
 }
 
 async function getFoodItems(req, res) {
@@ -127,10 +138,18 @@ async function getSavedFoodItems(req, res) {
     });
 }
 
+async function updateFoodAnalytics(req, res) {
+    const foodId = req.params.id;
+    const orderAmount = 295;
+    const updated = updateFoodAnalytic(foodId, orderAmount)
+}
+
 module.exports = {
     createFood,
+    deleteFood,
     getFoodItems,
     likeFood,
     saveFoodItem,
-    getSavedFoodItems
+    getSavedFoodItems,
+    updateFoodAnalytics
 }

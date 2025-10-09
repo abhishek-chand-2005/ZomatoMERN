@@ -8,6 +8,10 @@ async function findFoodPartnerByEmail(email) {
     return await foodPartnerModel.findOne({ email });
 }
 
+async function findFoodPartnerById(id) {
+    return await foodPartnerModel.findById(id);
+}
+
 async function createFoodPartner(data) {
     return await foodPartnerModel.create(data);
 }
@@ -15,5 +19,6 @@ async function createFoodPartner(data) {
 module.exports = {
     findUserByFullName,
     findFoodPartnerByEmail,
-    createFoodPartner
+    createFoodPartner,
+    findFoodPartnerById
 };

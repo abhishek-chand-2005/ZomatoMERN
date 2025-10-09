@@ -9,10 +9,17 @@ const upload = multer({
 })
 
 //[protected]
-router.post('/',
+router.post('/createFood',
     authMiddleware.authFoodPartnerMiddleware,
     upload.single('video'),
-    foodController.createFood )
+    foodController.createFood 
+)
+
+router.delete('/:id',
+    authMiddleware.authFoodPartnerMiddleware,
+    foodController.deleteFood
+
+)
 
 router.get('/', 
     authMiddleware.authUserMiddleware,
@@ -33,6 +40,28 @@ router.get('/saved',
     authMiddleware.authUserMiddleware,
     foodController.getSavedFoodItems
 )
+
+router.get('/:id/analytics',
+  authMiddleware.authFoodPartnerMiddleware,
+  foodController.updateFoodAnalytics
+)
+
+// router.ger('/food/:id/analytics',  async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const analytics = await RestaurantAnalytics.findOne({ restaurantId: id });
+
+//     if (!analytics) {
+//       return res.status(404).json({ message: 'Analytics not found for this restaurant.' });
+//     }
+
+//     return res.json(analytics);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: 'Error fetching analytics.' });
+//   }
+// });
 
 
 module.exports = router
