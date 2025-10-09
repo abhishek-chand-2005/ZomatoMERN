@@ -10,6 +10,7 @@ async function createFood(req, res) {
     
     const foodItem = await foodModel.create({
         name: req.body.name,
+        price: req.body.price,
         description: req.body.description,
         video: fileUploadResult.url,
         foodPartner: req.foodPartner._id
@@ -138,10 +139,9 @@ async function getSavedFoodItems(req, res) {
     });
 }
 
-async function updateFoodAnalytics(req, res) {
+async function foodAnalytics(req, res) {
     const foodId = req.params.id;
-    const orderAmount = 295;
-    const updated = updateFoodAnalytic(foodId, orderAmount)
+    const updated = updateFoodAnalytic(foodId)
 }
 
 module.exports = {
@@ -151,5 +151,5 @@ module.exports = {
     likeFood,
     saveFoodItem,
     getSavedFoodItems,
-    updateFoodAnalytics
+    foodAnalytics
 }

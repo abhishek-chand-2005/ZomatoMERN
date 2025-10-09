@@ -43,7 +43,7 @@ router.get('/saved',
 
 router.get('/:id/analytics',
   authMiddleware.authFoodPartnerMiddleware,
-  foodController.updateFoodAnalytics
+  foodController.foodAnalytics
 )
 
 // router.ger('/food/:id/analytics',  async (req, res) => {

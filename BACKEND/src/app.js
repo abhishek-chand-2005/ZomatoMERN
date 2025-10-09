@@ -6,6 +6,7 @@ const cors = require('cors')
 const userRoutes = require('./routes/Auth/auth.routes')
 const restaurantRoutes = require('./routes/restaurant.routes')
 const foodPartner = require('./routes/food-partner.route')
+const orderRoutes = require('./routes/order.routes.js')
 
 // Database
 const connectDB = require('./config/db')
@@ -24,5 +25,6 @@ app.use(cors({
 app.use('/api/Auth', userRoutes)
 app.use('/api/food-partner', foodPartner)
 app.use('/api/food', restaurantRoutes)
+app.use('/api/order', orderRoutes)
 
 module.exports = app;

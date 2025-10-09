@@ -4,6 +4,10 @@ const foodSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    price:{
+        type: Number,
+        required: true
+    },
     video: {
         type: String,
         required: true
