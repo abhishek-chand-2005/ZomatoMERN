@@ -8,6 +8,7 @@ const restaurantRoutes = require('./routes/restaurant.routes')
 const foodPartner = require('./routes/food-partner.route')
 const orderRoutes = require('./routes/order.routes.js')
 const paymentRoutes = require('./routes/payment.routes.js')
+const adminRoutes = require('./routes/admin.routes.js')
 
 // Database
 const connectDB = require('./config/db')
@@ -28,5 +29,6 @@ app.use('/api/food-partner', foodPartner)
 app.use('/api/food', restaurantRoutes)
 app.use('/api/order', orderRoutes)
 app.use('/api/payment', paymentRoutes)
+app.use('/api/admin', adminRoutes)
 
 module.exports = app;

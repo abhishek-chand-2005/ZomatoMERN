@@ -102,6 +102,30 @@ async function loginFoodPartner(req, res) {
 
 }
 
+async function loginAdmin(req, res) {
+    const { email, password} = req.body;
+
+    const validateLoginInputError = validateLoginInput(email, password);
+    if (validateLoginInputError) {
+        return res.status(400).json({ message: validateLoginInputError });
+    }
+
+    const admin = await AuthService.loginAdmin(email, password);
+
+    const token = signToken({id: admin._id})
+
+    res.cookie("token", token)
+
+    res.status(200).json({
+        message:"admin loggedIn successfully.",
+
+        admin:{
+            _id: admin._id,
+            email: admin.email,
+            fullName: admin.name
+        }
+    })
+}
 async function logout(req, res) {
     res.clearCookie('token')
     res.status(200).json({
@@ -114,5 +138,6 @@ module.exports = {
     loginUser,
     registerFoodPartner,
     loginFoodPartner,
-    logout
+    logout,
+    loginAdmin
 }

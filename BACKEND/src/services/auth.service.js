@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const userDAO = require('../dao/user.dao');
 const foodPartnerDAO = require('../dao/foodPartner.dao');
+const findAdminByEmail = require('../dao/admin.dao')
 
 
 async function registerUser(fullName, password, email) {
@@ -109,12 +110,26 @@ async function loginFoodPartner(email, password) {
     }
 }
 
+async function loginAdmin(email, password) {
+    try{
+        const admin = await findAdminByEmail(email)
+        if(!admin){
+            throw new Error("Invalid credintial.")
+        }
+        return admin;
+    }catch(err){
+            console.error("Error in login Admin", err);
+            throw err;
+    }
+}
+
 
 module.exports = {
     registerUser,
     loginUser,
     registerFoodPartner,
-    loginFoodPartner
+    loginFoodPartner,
+    loginAdmin
 };
 
 
